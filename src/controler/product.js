@@ -32,10 +32,16 @@ export const productByRange = async (req, res) => {
 };
 export const getAll = async (req, res) => {
   const filter = req?.params;
-  console.log("filter", filter);
+  const { limit, page } = req.query;
+  const options = {
+    page,
+    limit,
+  };
+
   try {
-    let data = await model.Product.find(filter);
-    res.send({ status: 200, data });
+    let data = await model.Product.paginate(filter, options);
+
+    res.send({ status: 200, data: data?.docs, count: data?.totalDocs });
   } catch (error) {
     res.send({ status: 400, message: error.message });
   }
