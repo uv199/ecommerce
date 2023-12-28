@@ -7,7 +7,8 @@ import {
   getById,
   productByRange,
   updateProduct,
-  getAll
+  getAll,
+  getAllPaginate
 } from "../controler/product";
 
 const productRouter = express.Router();
@@ -17,6 +18,7 @@ productRouter.post("/create", AdminAuth, createProduct);
 productRouter.get("/getProductById/:id", getById);
 
 productRouter.get("/getAll", getAll);
+productRouter.get("/getAllPaginate", getAllPaginate);
 
 productRouter.get("/getProductByRang", productByRange);
 

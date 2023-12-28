@@ -30,18 +30,47 @@ export const productByRange = async (req, res) => {
     res.send({ status: 400, message: error.message });
   }
 };
-export const getAll = async (req, res) => {
+export const getAllPaginate = async (req, res) => {
   const filter = req?.params;
   const { limit, page } = req.query;
-  const options = {
-    page,
-    limit,
-  };
+  const options = limit &&
+    page && {
+      page,
+      limit,
+    };
+
+  console.log("-----------  options----------->", options);
+  if (filter.color) {
+    filter = {
+      ...filter,
+      color: {
+        $in: color,
+      },
+    };
+  }
 
   try {
     let data = await model.Product.paginate(filter, options);
 
     res.send({ status: 200, data: data?.docs, count: data?.totalDocs });
+  } catch (error) {
+    res.send({ status: 400, message: error.message });
+  }
+};
+export const getAll = async (req, res) => {
+  // if (filter.color) {
+  //   filter = {
+  //     ...filter,
+  //     color: {
+  //       $in: color,
+  //     },
+  //   };
+  // }
+
+  try {
+    let data = await model.Product.find();
+
+    res.send({ status: 200, data });
   } catch (error) {
     res.send({ status: 400, message: error.message });
   }
