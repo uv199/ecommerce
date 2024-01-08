@@ -28,5 +28,9 @@ const productSchema = mongoose.Schema(
   { timestamps: true }
 );
 
+productSchema.index(
+  { title: "text", description: "text" },
+  { default_language: "en", caseSensitive: true }
+);
 productSchema.plugin(mongoosePaginate);
 export default mongoose.model("product", productSchema);

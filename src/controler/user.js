@@ -25,7 +25,6 @@ export const getAll = (req, res) => {
       res.send({ status: "400", mesage: err.message });
     });
 };
-
 export const signIn = async (req, res) => {
   let { email, password } = req?.body;
   console.log(" req?.body", req?.body);
@@ -33,13 +32,12 @@ export const signIn = async (req, res) => {
     const matchUser = await model.User.findOne({ email });
 
     if (matchUser) {
-      console.log("isMatchPass", isMatchPass);
       let isMatchPass = await bycrypt.compare(
         password || "",
         matchUser.password
       );
       if (!isMatchPass) {
-        res.status(400).send("email or password not match....!");
+        res.status(400).send("Email or password do not match.");
       } else {
         let token = useToken({
           email: matchUser.email,
@@ -49,12 +47,43 @@ export const signIn = async (req, res) => {
         res.send({ status: 200, data: matchUser, token });
       }
     } else {
-      throw new Error("Match user not found....!");
+      res.status(404).send("Match user not found.");
+      // throw new Error("------>-------")
+      
     }
   } catch (error) {
-    res.status(400).send("Match user not found....!");
+    console.error("Error:", error);
+    res.status(500).send("Internal Server Error.");
   }
 };
+// export const signIn = async (req, res) => {
+//   let { email, password } = req?.body;
+//   console.log(" req?.body", req?.body);
+//   try {
+//     const matchUser = await model.User.findOne({ email });
+
+//     if (matchUser) {
+//       console.log("isMatchPass", isMatchPass);
+//       let isMatchPass = await bycrypt.compare(
+//         password || "",
+//         matchUser.password
+//       );
+//       if (!isMatchPass) {
+//         res.status(400).send( "email or password not match....!" );
+//       } else {
+//         let token = useToken({
+//           email: matchUser.email,
+//           userType: matchUser.userType,
+//         });
+//         res.send({ status: 200, data: matchUser, token });
+//       }
+//     } else {
+//       res.status(404).send( "Match user not found." );
+//     }
+//   } catch (error) {
+//     res.status(500).send( "Internal Server Error." );
+//   }
+// };
 
 export const getUserById = async (req, res) => {
   let id = req?.params?.id;
@@ -73,7 +102,7 @@ export const getUserById = async (req, res) => {
 
 export const signUp = async (req, res) => {
   let input = req?.body;
-  console.log("input", input)
+  console.log("input", input);
   model.User.create(input)
     .then((resData) => {
       res.send({

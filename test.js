@@ -87,35 +87,41 @@
 // }
 // console.log(str);
 
-class A {
-  display(a, b, c) {
-    console.log("A is invoked<br>", a, b, c);
-  }
-}
-class B extends A {
-  display(a, b) {
-    console.log("B is invoked", a, b);
-  }
-  display(a, b, c) {
-    console.log("B is invoked---->", a, b, c);
-  }
-}
+// class A {
+//   display(a, b, c) {
+//     console.log("A is invoked<br>", a, b, c);
+//   }
+// }
+// class B extends A {
+//   display(a, b) {
+//     console.log("B is invoked", a, b);
+//   }
+//   display(a, b, c) {
+//     console.log("B is invoked---->", a, b, c);
+//   }
+// }
 
-var a = new B();
+// var a = new B();
 
-a.display(1, 2);
+// a.display(1, 2);
 
-class Animal {
- makeSound() {
-    return "Generic animal sound";
-  } 
-}
-class Dog extends Animal {
-  makeSound() {
-    return "Woof!";
-  }
-}
-const genericAnimal = new Animal();
-const dog = new Dog();
-console.log(genericAnimal.makeSound()); // Output: Generic animal sound console.log(dog.makeSound()); // Output: Woof!
-console.log(dog.makeSound()); // Output: Generic animal sound console.log(dog.makeSound()); // Output: Woof!
+// class Animal {
+//  makeSound() {
+//     return "Generic animal sound";
+//   }
+// }
+// class Dog extends Animal {
+//   makeSound() {
+//     return "Woof!";
+//   }
+// }
+// const genericAnimal = new Animal();
+// const dog = new Dog();
+// console.log(genericAnimal.makeSound()); // Output: Generic animal sound console.log(dog.makeSound()); // Output: Woof!
+// console.log(dog.makeSound()); // Output: Generic animal sound console.log(dog.makeSound()); // Output: Woof!
+
+// let name = "";
+
+// let obj = {
+//   ...(name && { name: "name" }),
+// };

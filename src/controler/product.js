@@ -51,26 +51,105 @@ export const getAllPaginate = async (req, res) => {
 
   try {
     let data = await model.Product.paginate(filter, options);
+    console.log("-----------  data----------->", data);
 
     res.send({ status: 200, data: data?.docs, count: data?.totalDocs });
   } catch (error) {
     res.send({ status: 400, message: error.message });
   }
 };
+
 export const getAll = async (req, res) => {
-  // if (filter.color) {
-  //   filter = {
-  //     ...filter,
-  //     color: {
-  //       $in: color,
-  //     },
-  //   };
-  // }
+  const filterQuery = req?.body;
+  let filtarableFeilds = [
+    "color",
+    "size",
+    "price",
+    "category",
+    "rating",
+    "discountPercentage",
+  ];
+  let filter = {
+    ...(filterQuery?.gender && { gender: filterQuery?.gender }),
+    ...(filterQuery?.brand && { brand: filterQuery?.brand }),
+    ...(filterQuery?.isAvailable && { isAvailable: filterQuery?.isAvailable }),
+  };
 
+  filtarableFeilds.forEach((field) => {
+    console.log(
+      "-----------  filterQuery[field]----------->",
+      filterQuery[field]
+    );
+    if (filterQuery[field]) {
+      console.log("---=-=-=-=-=-=-=->");
+      switch (field) {
+        case "color":
+          console.log("color", filter);
+
+          filter[field] = filterQuery?.[field]?.length > 0 && {
+            $in: filterQuery[field],
+          };
+          break;
+        case "category":
+          console.log("category", filter);
+          filter[field] = filterQuery?.[field]?.length > 0 && {
+            $in: filterQuery[field],
+          };
+          break;
+        case "size":
+          console.log("size", filter);
+          filter[field] = filterQuery?.[field]?.length > 0 && {
+            $in: filterQuery[field],
+          };
+          break;
+        case "price":
+          console.log("price", filter);
+          filter[field] = {
+            $lte: parseInt(filterQuery[field].lt),
+            $gte: parseInt(filterQuery[field].gt),
+          };
+          break;
+        case "discountPercentage":
+          console.log("discountPercentage", filter);
+          filter[field] = {
+            $lte: parseInt(filterQuery[field].lt),
+            $gte: parseInt(filterQuery[field].gt),
+          };
+          break;
+        case "rating":
+          console.log("rating", filter);
+          if (filterQuery.rating) {
+            const minRating = parseFloat(filterQuery.rating);
+            filter["$expr"] = {
+              $gte: [{ $divide: ["$rating", "$totalRaters"] }, minRating],
+            };
+          }
+          break;
+      }
+    }
+  });
+
+  console.log("filter ", filter);
+
+  let aggrigation = [
+    { $match: filter },
+    {
+      $group: {
+        _id: null,
+        count: { $sum: 1 },
+        data: { $push: "$$ROOT" },
+      },
+    },
+    { $skip: 0 },
+    { $limit: 10 },
+  ];
   try {
-    let data = await model.Product.find();
-
-    res.send({ status: 200, data });
+    let [response] = await model.Product.aggregate(aggrigation);
+    res.send({
+      status: 200,
+      count: response?.count || 0,
+      data: response?.data || [],
+    });
   } catch (error) {
     res.send({ status: 400, message: error.message });
   }
