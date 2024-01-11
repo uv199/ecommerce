@@ -60,7 +60,8 @@ export const getAllPaginate = async (req, res) => {
 };
 
 export const getAll = async (req, res) => {
-  const filterQuery = req?.body;
+  const filterQuery = req?.query;
+  console.log("-----------  filterQuery----------->", filterQuery);
   let filtarableFeilds = [
     "color",
     "size",
@@ -68,6 +69,7 @@ export const getAll = async (req, res) => {
     "category",
     "rating",
     "discountPercentage",
+    "search",
   ];
   let filter = {
     ...(filterQuery?.gender && { gender: filterQuery?.gender }),
@@ -76,13 +78,14 @@ export const getAll = async (req, res) => {
   };
 
   filtarableFeilds.forEach((field) => {
-    console.log(
-      "-----------  filterQuery[field]----------->",
-      filterQuery[field]
-    );
     if (filterQuery[field]) {
-      console.log("---=-=-=-=-=-=-=->");
       switch (field) {
+        case "search":
+          filter["$or"] = [
+            { title: { $regex: filterQuery[field] } },
+            { description: { $regex: filterQuery[field] } },
+          ];
+          break;
         case "color":
           console.log("color", filter);
 
@@ -129,10 +132,13 @@ export const getAll = async (req, res) => {
     }
   });
 
-  console.log("filter ", filter);
+  console.log("filter =====>", filter);
 
   let aggrigation = [
     { $match: filter },
+    {
+      $sort: { createdAt: -1 },
+    },
     {
       $group: {
         _id: null,
@@ -140,8 +146,6 @@ export const getAll = async (req, res) => {
         data: { $push: "$$ROOT" },
       },
     },
-    { $skip: 0 },
-    { $limit: 10 },
   ];
   try {
     let [response] = await model.Product.aggregate(aggrigation);

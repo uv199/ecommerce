@@ -10,6 +10,9 @@ let userSchema = mongoose.Schema(
     name: {
       type: String,
     },
+    img: {
+      type: String,
+    },
     userType: {
       type: String,
       enum: ["admin", "customer"],

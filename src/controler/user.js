@@ -4,7 +4,6 @@ import { sendOTP } from "../functions/otpServices";
 import jwt from "jsonwebtoken";
 import bycrypt from "bcrypt";
 import { emailService } from "../functions/emailService";
-import { promises } from "nodemailer/lib/xoauth2";
 
 const useToken = (data) => {
   return jwt.sign(data, process.env.SECRET_KEY);
@@ -25,6 +24,7 @@ export const getAll = (req, res) => {
       res.send({ status: "400", mesage: err.message });
     });
 };
+
 export const signIn = async (req, res) => {
   let { email, password } = req?.body;
   console.log(" req?.body", req?.body);
@@ -49,41 +49,12 @@ export const signIn = async (req, res) => {
     } else {
       res.status(404).send("Match user not found.");
       // throw new Error("------>-------")
-      
     }
   } catch (error) {
     console.error("Error:", error);
     res.status(500).send("Internal Server Error.");
   }
 };
-// export const signIn = async (req, res) => {
-//   let { email, password } = req?.body;
-//   console.log(" req?.body", req?.body);
-//   try {
-//     const matchUser = await model.User.findOne({ email });
-
-//     if (matchUser) {
-//       console.log("isMatchPass", isMatchPass);
-//       let isMatchPass = await bycrypt.compare(
-//         password || "",
-//         matchUser.password
-//       );
-//       if (!isMatchPass) {
-//         res.status(400).send( "email or password not match....!" );
-//       } else {
-//         let token = useToken({
-//           email: matchUser.email,
-//           userType: matchUser.userType,
-//         });
-//         res.send({ status: 200, data: matchUser, token });
-//       }
-//     } else {
-//       res.status(404).send( "Match user not found." );
-//     }
-//   } catch (error) {
-//     res.status(500).send( "Internal Server Error." );
-//   }
-// };
 
 export const getUserById = async (req, res) => {
   let id = req?.params?.id;
@@ -101,7 +72,7 @@ export const getUserById = async (req, res) => {
 };
 
 export const signUp = async (req, res) => {
-  let input = req?.body;
+
   console.log("input", input);
   model.User.create(input)
     .then((resData) => {
@@ -179,3 +150,32 @@ export const reset_passsword = async (req, res) => {
     res.send({ status: "400", message: error.message });
   }
 };
+
+// export const signIn = async (req, res) => {
+//   let { email, password } = req?.body;
+//   console.log(" req?.body", req?.body);
+//   try {
+//     const matchUser = await model.User.findOne({ email });
+
+//     if (matchUser) {
+//       console.log("isMatchPass", isMatchPass);
+//       let isMatchPass = await bycrypt.compare(
+//         password || "",
+//         matchUser.password
+//       );
+//       if (!isMatchPass) {
+//         res.status(400).send( "email or password not match....!" );
+//       } else {
+//         let token = useToken({
+//           email: matchUser.email,
+//           userType: matchUser.userType,
+//         });
+//         res.send({ status: 200, data: matchUser, token });
+//       }
+//     } else {
+//       res.status(404).send( "Match user not found." );
+//     }
+//   } catch (error) {
+//     res.status(500).send( "Internal Server Error." );
+//   }
+// };

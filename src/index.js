@@ -17,6 +17,7 @@ import { sendEmailTemp } from "./functions/emailService";
 
 import passport from "passport";
 import moment from "moment/moment";
+import bodyParser from "body-parser";
 
 const port = process.env.PORT || 3000;
 app.get(
@@ -36,6 +37,7 @@ app.get("/login", (req, res) => {
 });
 
 app.use(express.json());
+app.use(bodyParser.raw({ type: "*/*" }));
 app.use(cors());
 app.use("/user", Routes.userRoute);
 app.use("/product", Routes.productRoute);
