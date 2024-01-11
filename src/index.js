@@ -10,6 +10,7 @@ import GoogkleAuth from "./GoogleAuth/googleAuth";
 import http from "http";
 const app = express();
 const server = http.createServer(app);
+import { json } from "body-parser";
 
 import { Server } from "socket.io";
 import { cronJob } from "./functions/cronJob";
@@ -38,7 +39,10 @@ app.get("/login", (req, res) => {
 
 app.use(express.json());
 app.use(bodyParser.raw({ type: "*/*" }));
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb" }));
 app.use(cors());
+app.use("/", json());
 app.use("/user", Routes.userRoute);
 app.use("/product", Routes.productRoute);
 app.use("/cart", Routes.cartRouter);

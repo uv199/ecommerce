@@ -4,7 +4,7 @@ import { authorized } from "../auth";
 
 const cartRouter = express.Router();
 
-cartRouter.post("/create", authorized, create);
+cartRouter.post("/create/:id", authorized, create);
 
 cartRouter.get("/getAll", authorized, getall);
 
