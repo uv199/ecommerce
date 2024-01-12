@@ -71,6 +71,12 @@ export const getUserById = async (req, res) => {
   }
 };
 
+export const uploadFile = (req, res) => {
+  console.log("-----------  req----------->", req?.file);
+
+  res.send("done");
+};
+
 export const signUp = async (req, res) => {
   let input = req?.body;
   model.User.create(input)
