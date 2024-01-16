@@ -8,10 +8,11 @@ import {
   signUp,
   updateUser,
 } from "../controler/user";
-import { AdminAuth } from "../auth";
+import { AdminAuth, authorized } from "../auth";
 
 import multer from "multer";
 import path from "path";
+import { model } from "../models";
 
 const uploadFolder = path.join(__dirname, "..", "..", "assets");
 
@@ -29,12 +30,22 @@ const upload = multer({ storage });
 
 const userRouter = express.Router();
 
-userRouter.post("/upload", upload.single("avatar"), (req, res, next) => {
-  if (!req.file) {
-    return res.status(400).send("No file uploaded.");
+userRouter.post(
+  "/upload",
+  authorized,
+  upload.single("avatar"),
+  async (req, res, next) => {
+    if (!req.file) {
+      return res.status(400).send("No file uploaded.");
+    }
+    let data = await model.User.findByIdAndUpdate(req?.loginUser?.id, {
+      image: req?.file?.filename,
+    },{new:true});
+    console.log("-----------  data----------->", data);
+
+    res.status(200).send(req.file);
   }
-  res.status(200).send(req.file);
-});
+);
 
 userRouter.get("/getAll", getAll);
 

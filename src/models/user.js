@@ -10,7 +10,7 @@ let userSchema = mongoose.Schema(
     name: {
       type: String,
     },
-    img: {
+    image: {
       type: String,
     },
     userType: {

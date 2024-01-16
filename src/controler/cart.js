@@ -14,26 +14,20 @@ export const getall = (req, res) => {
 
 export const create = async (req, res) => {
   const productId = req?.params?.id;
-  console.log("req?.loginUser?._id", req?.loginUser?._id);
   const match = await model.Cart.findOne(
-    { userId: req?.loginUser?._id }
+    { userId: req?.loginUser?.id }
     // { "products": { $exists: true, $not: { $size: 0 } } }
   );
-  console.log("match", match);
   if (match) {
     let index = match?.products?.findIndex((e) => {
       console.log(e?.productId.toString(), productId);
       return e?.productId.toString() === productId;
     });
     if (index === -1) {
-      console.log("----");
       match.products.push({ productId: productId, count: 1 });
     } else {
-      console.log("=====");
       match.products[index].count += 1;
     }
-    console.log("---index", index);
-    // console.log()
     model?.Cart?.findByIdAndUpdate(match?._id, match, { new: true })
       .then((resData) => {
         res.send({ status: 200, data: resData });
@@ -43,7 +37,7 @@ export const create = async (req, res) => {
       });
   } else {
     model.Cart.create({
-      userId: req?.loginUser?._id,
+      userId: req?.loginUser?.id,
       products: [{ productId, count: 1 }],
     })
       .then((resData) => {
@@ -56,7 +50,17 @@ export const create = async (req, res) => {
 };
 
 export const update = (req, res) => {
-  model.Cart.findByIdAndUpdate(req?.params?.id, req?.body, { new: true })
+  let { _id, productId, isRemove } = req?.body;
+
+  let update = isRemove
+    ? { $pull: { products: { productId } } }
+    : { $inc: { "products.$.count": -1 } };
+
+  model.Cart.findOneAndUpdate(
+    { _id, "products.productId": productId },
+    update,
+    { new: true }
+  )
     .then((resData) => {
       res.send({ status: 200, data: resData });
     })

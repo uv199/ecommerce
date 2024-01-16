@@ -10,7 +10,7 @@ export const authorized = async (req, res, next) => {
     const data = jwt.verify(token, process.env.SECRET_KEY);
     if (data) {
       const userData = await model.User.findOne({ email: data?.email });
-      req.loginUser = userData;
+      req.loginUser = { ...userData, id: userData?._id.toString() };
       next();
     } else throw new Error("you are not authorized");
   } catch (error) {

@@ -1,8 +1,8 @@
 import { model } from "../models";
 
 export const createWishlist = (req, res) => {
-  req.body.userId = req?.loginUser?._id;
-  model.WishList.update({ userId: req?.loginUser?._id }, req?.body, {
+  req.body.userId = req?.loginUser?.id;
+  model.WishList.update({ userId: req?.loginUser?.id }, req?.body, {
     upsert: true,
   })
     .then((resData) => {
@@ -14,8 +14,7 @@ export const createWishlist = (req, res) => {
 };
 
 export const getByUserId = (req, res) => {
-  console.log("req?.loginUser?._id", req?.loginUser?._id);
-  model.WishList.findOne({ userId: req?.loginUser?._id })
+  model.WishList.findOne({ userId: req?.loginUser?.id })
     .populate([{ path: "products" }])
     .then((resData) => {
       res.send({ status: 200, data: resData });
@@ -26,7 +25,7 @@ export const getByUserId = (req, res) => {
 };
 
 export const updateWishlist = (req, res) => {
-  model.WishList.findOneAndUpdate({ userId: req?.loginUser?._id }, req?.body, {
+  model.WishList.findOneAndUpdate({ userId: req?.loginUser?.id }, req?.body, {
     new: true,
   })
     .then((resData) => {
