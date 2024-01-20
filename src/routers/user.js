@@ -38,12 +38,30 @@ userRouter.post(
     if (!req.file) {
       return res.status(400).send("No file uploaded.");
     }
-    let data = await model.User.findByIdAndUpdate(req?.loginUser?.id, {
-      image: req?.file?.filename,
-    },{new:true});
-    console.log("-----------  data----------->", data);
+    let data = await model.User.findByIdAndUpdate(
+      req?.loginUser?.id,
+      {
+        image: req?.file?.filename,
+      },
+      { new: true }
+    );
 
     res.status(200).send(req.file);
+  }
+);
+userRouter.post(
+  "/photos/upload",
+  authorized,
+  upload.array("photos", 12),
+  async (req, res, next) => {
+    try {
+      if (!req.file) {
+        return res.status(400).send("No file uploaded.");
+      }
+      res.status(200).send(req.file);
+    } catch (error) {
+      console.log("-----------  error----------->", error);
+    }
   }
 );
 

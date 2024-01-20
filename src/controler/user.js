@@ -13,7 +13,6 @@ export const getAll = (req, res) => {
   model.User.find({})
     // .populate({ path: "products.productId" })
     .then((resData) => {
-      console.log("resData", resData);
       if (resData.length > 0) {
         res.send({ status: "200", data: resData });
       } else {
@@ -27,7 +26,6 @@ export const getAll = (req, res) => {
 
 export const signIn = async (req, res) => {
   let { email, password } = req?.body;
-  console.log(" req?.body", req?.body);
   try {
     const matchUser = await model.User.findOne({ email });
 
@@ -60,7 +58,6 @@ export const getUserById = async (req, res) => {
   let id = req?.params?.id;
   try {
     let matchUser = await model.User.findById(id);
-    console.log(" matchUser:", matchUser);
     if (matchUser) {
       res.send({ status: 200, data: matchUser });
     } else {
@@ -72,7 +69,6 @@ export const getUserById = async (req, res) => {
 };
 
 export const uploadFile = (req, res) => {
-  console.log("-----------  req----------->", req?.file);
 
   res.send("done");
 };
@@ -140,7 +136,6 @@ export const reset_passsword = async (req, res) => {
     const user = await model.User.findOne({ code: otp });
     if (user) {
       let x = new Date() - new Date(user?.updatedAt);
-      console.log("x:", x);
       if (x > 120000) {
         res.send({ status: 400, message: "otp expire...!" });
       } else {
@@ -158,12 +153,10 @@ export const reset_passsword = async (req, res) => {
 
 // export const signIn = async (req, res) => {
 //   let { email, password } = req?.body;
-//   console.log(" req?.body", req?.body);
 //   try {
 //     const matchUser = await model.User.findOne({ email });
 
 //     if (matchUser) {
-//       console.log("isMatchPass", isMatchPass);
 //       let isMatchPass = await bycrypt.compare(
 //         password || "",
 //         matchUser.password

@@ -39,7 +39,6 @@ export const getAllPaginate = async (req, res) => {
       limit,
     };
 
-  console.log("-----------  options----------->", options);
   if (filter.color) {
     filter = {
       ...filter,
@@ -51,7 +50,6 @@ export const getAllPaginate = async (req, res) => {
 
   try {
     let data = await model.Product.paginate(filter, options);
-    console.log("-----------  data----------->", data);
 
     res.send({ status: 200, data: data?.docs, count: data?.totalDocs });
   } catch (error) {
@@ -61,7 +59,6 @@ export const getAllPaginate = async (req, res) => {
 
 export const getAll = async (req, res) => {
   const filterQuery = req?.query;
-  console.log("-----------  filterQuery----------->", filterQuery);
   let filtarableFeilds = [
     "color",
     "size",
@@ -87,40 +84,34 @@ export const getAll = async (req, res) => {
           ];
           break;
         case "color":
-          console.log("color", filter);
 
           filter[field] = filterQuery?.[field]?.length > 0 && {
             $in: filterQuery[field],
           };
           break;
         case "category":
-          console.log("category", filter);
           filter[field] = filterQuery?.[field]?.length > 0 && {
             $in: filterQuery[field],
           };
           break;
         case "size":
-          console.log("size", filter);
           filter[field] = filterQuery?.[field]?.length > 0 && {
             $in: filterQuery[field],
           };
           break;
         case "price":
-          console.log("price", filter);
           filter[field] = {
             $lte: parseInt(filterQuery[field].lt),
             $gte: parseInt(filterQuery[field].gt),
           };
           break;
         case "discountPercentage":
-          console.log("discountPercentage", filter);
           filter[field] = {
             $lte: parseInt(filterQuery[field].lt),
             $gte: parseInt(filterQuery[field].gt),
           };
           break;
         case "rating":
-          console.log("rating", filter);
           if (filterQuery.rating) {
             const minRating = parseFloat(filterQuery.rating);
             filter["$expr"] = {
@@ -132,7 +123,6 @@ export const getAll = async (req, res) => {
     }
   });
 
-  console.log("filter =====>", filter);
 
   let aggrigation = [
     { $match: filter },
@@ -162,7 +152,6 @@ export const getAll = async (req, res) => {
 export const createProduct = (req, res) => {
   model.Product.create(req?.body)
     .then((resData) => {
-      console.log("resData", resData);
       res.send({ status: 200, data: resData });
     })
     .catch((err) => {
@@ -191,7 +180,6 @@ export const updateProduct = (req, res) => {
 };
 
 export const deleteProduct = (req, res) => {
-  console.log("req?.params?.id", req?.params?.id);
   model.Product.findByIdAndRemove(req?.params?.id)
     .then((resData) => {
       res.send({ status: 200, message: "Delete successFully...!" });

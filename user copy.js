@@ -33,7 +33,6 @@ userRouter.get("/getUsers", async (req, res) => {
       res.send("data not Found...!");
     }
   } catch (error) {
-    console.log("test");
     res.status(400).send(error.message);
   }
 });
