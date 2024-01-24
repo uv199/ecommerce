@@ -8,6 +8,7 @@ export const authorized = async (req, res, next) => {
     // const token = req.headers.auth_token
 
     const data = jwt.verify(token, process.env.SECRET_KEY);
+    console.log("-----------  data----------->", data)
     if (data) {
       const userData = await model.User.findOne({ email: data?.email });
       req.loginUser = { ...userData, id: userData?._id.toString() };

@@ -5,7 +5,8 @@ export const getall = (req, res) => {
   model.Cart.find({ userId: req?.loginUser?.id })
     .populate([{ path: "products.productId" }])
     .then((resData) => {
-      res.send({ status: 200, data: resData?.[0]?.products });
+      let data = resData?.[0];
+      res.send({ status: 200, data: data?.products, cartId: data?._id });
     })
     .catch((err) => {
       res.send({ status: 400, message: err.message });
@@ -51,7 +52,7 @@ export const create = async (req, res) => {
 
 export const update = (req, res) => {
   let { _id, productId, isRemove } = req?.body;
-
+  console.log("isRemove ", isRemove);
   let update = isRemove
     ? { $pull: { products: { productId } } }
     : { $inc: { "products.$.count": -1 } };
