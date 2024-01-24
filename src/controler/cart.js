@@ -61,6 +61,7 @@ export const update = (req, res) => {
     update,
     { new: true }
   )
+    .populate({ path: "products.productId" })
     .then((resData) => {
       res.send({ status: 200, data: resData?.products, cartId: resData?._id });
     })
