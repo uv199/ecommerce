@@ -52,7 +52,6 @@ export const create = async (req, res) => {
 
 export const update = (req, res) => {
   let { _id, productId, isRemove } = req?.body;
-  console.log("isRemove ", isRemove);
   let update = isRemove
     ? { $pull: { products: { productId } } }
     : { $inc: { "products.$.count": -1 } };
@@ -63,7 +62,7 @@ export const update = (req, res) => {
     { new: true }
   )
     .then((resData) => {
-      res.send({ status: 200, data: resData });
+      res.send({ status: 200, data: resData?.products, cartId: resData?._id });
     })
     .catch((err) => {
       res.send({ status: 400, message: err.message });
