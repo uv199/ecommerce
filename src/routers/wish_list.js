@@ -6,6 +6,7 @@ import {
   updateWishlist,
 } from "../controler/wishlist";
 import { authorized } from "../auth";
+import { log } from "console";
 
 const wishListRouter = express.Router();
 

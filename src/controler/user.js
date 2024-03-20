@@ -10,7 +10,8 @@ const useToken = (data) => {
 };
 
 export const getAll = (req, res) => {
-  model.User.find({})
+  model.User.find()
+    .sort({ createdAt: -1 })
     // .populate({ path: "products.productId" })
     .then((resData) => {
       if (resData.length > 0) {
@@ -35,18 +36,17 @@ export const signIn = async (req, res) => {
         matchUser.password
       );
       if (!isMatchPass) {
-        res.status(400).send("Email or password do not match.");
+        return res.status(400).send("Email or password do not match.");
       } else {
         let token = useToken({
           email: matchUser.email,
           userType: matchUser.userType,
         });
 
-        res.send({ status: 200, data: matchUser, token });
+        return res.status(200).send({ status: 200, data: matchUser, token });
       }
     } else {
-      res.status(404).send("Match user not found.");
-      // throw new Error("------>-------")
+      return res.status(404).send("Match user not found.");
     }
   } catch (error) {
     console.error("Error:", error);
@@ -69,7 +69,6 @@ export const getUserById = async (req, res) => {
 };
 
 export const uploadFile = (req, res) => {
-
   res.send("done");
 };
 

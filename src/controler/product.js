@@ -2,7 +2,6 @@ import { model } from "../models";
 
 export const productByRange = async (req, res) => {
   let val = req?.body;
-
   let filter = {};
   if (val?.allow?.length > 0) {
     let arr = val.allow.map((e) => {
@@ -31,23 +30,28 @@ export const productByRange = async (req, res) => {
   }
 };
 export const getAllPaginate = async (req, res) => {
-  const filter = req?.params;
-  const { limit, page } = req.query;
+  const { limit, page, ...filter } = req.query;
   const options = limit &&
     page && {
       page,
       limit,
     };
 
-  if (filter.color) {
+  if (filter?.color) {
     filter = {
       ...filter,
       color: {
-        $in: color,
+        $in: filter?.color,
       },
     };
   }
-
+  if (filter?.search) {
+    filter["$or"] = [
+      { title: { $regex: filter.search, $options: "i" } },
+      { description: { $regex: filter.search } },
+    ];
+  }
+  console.log("-----------  filter----------->", filter);
   try {
     let data = await model.Product.paginate(filter, options);
 
@@ -84,7 +88,6 @@ export const getAll = async (req, res) => {
           ];
           break;
         case "color":
-
           filter[field] = filterQuery?.[field]?.length > 0 && {
             $in: filterQuery[field],
           };
@@ -123,7 +126,6 @@ export const getAll = async (req, res) => {
     }
   });
 
-
   let aggrigation = [
     { $match: filter },
     {
@@ -138,6 +140,7 @@ export const getAll = async (req, res) => {
     },
   ];
   try {
+    console.log("-----------  aggrigation----------->", aggrigation);
     let [response] = await model.Product.aggregate(aggrigation);
     res.send({
       status: 200,
