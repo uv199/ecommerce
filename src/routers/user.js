@@ -18,6 +18,7 @@ const uploadFolder = path.join(__dirname, "..", "..", "assets");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
+    console.log("-----------  file----------->", file)
     cb(null, uploadFolder);
   },
   filename: (req, file, cb) => {
@@ -32,17 +33,16 @@ const userRouter = express.Router();
 
 userRouter.post(
   "/upload",
-  authorized,
+  // authorized,
   upload.single("avatar"),
   async (req, res, next) => {
+    console.log("-----------  req----------->", req.body);
     if (!req.file) {
       return res.status(400).send("No file uploaded.");
     }
     let data = await model.User.findByIdAndUpdate(
       req?.loginUser?.id,
-      {
-        image: req?.file?.filename,
-      },
+      { image: req?.file?.filename },
       { new: true }
     );
 

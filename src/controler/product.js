@@ -63,6 +63,7 @@ export const getAllPaginate = async (req, res) => {
 
 export const getAll = async (req, res) => {
   const filterQuery = req?.query;
+  console.log("-----------  filterQuery----------->", filterQuery);
   let filtarableFeilds = [
     "color",
     "size",
@@ -73,6 +74,7 @@ export const getAll = async (req, res) => {
     "search",
   ];
   let filter = {
+    ...(filterQuery?.mainCategory && { mainCategory: filterQuery?.mainCategory }),
     ...(filterQuery?.gender && { gender: filterQuery?.gender }),
     ...(filterQuery?.brand && { brand: filterQuery?.brand }),
     ...(filterQuery?.isAvailable && { isAvailable: filterQuery?.isAvailable }),

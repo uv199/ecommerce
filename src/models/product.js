@@ -13,6 +13,7 @@ const productSchema = mongoose.Schema(
     images: [String],
     thumbnail: String,
     discountPercentage: Number,
+    mainCategory: String,
     category: { type: [String] },
     color: { type: [String], default: ["red", "black", "white"] },
     size: { type: [String], default: ["44", "45", "42", "43"] },

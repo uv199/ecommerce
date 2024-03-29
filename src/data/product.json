@@ -2493,7 +2493,8 @@
     "discountPercentage": 15.34,
     "availableStock": 7,
     "brand": "Oppo",
-    "category": ["smartphones", "3g", "4g"],
+    "mainCategory": "earing",
+    "category": [ "3g", "4g", "cotton", "banarashi", "wedding"],
     "thumbnail": "https://i.dummyjson.com/data/products/29/thumbnail.webp",
     "images": [
       "https://i.dummyjson.com/data/products/29/1.jpg",
@@ -2512,6 +2513,8 @@
     "availableStock": 54,
     "brand": "Oppo",
     "category": ["smartphones", "3g", "4g"],
+    "color": ["smartphones", "3g", "4g"],
+    "size": ["100ml", "200ml"],
     "thumbnail": "https://i.dummyjson.com/data/products/30/thumbnail.jpg",
     "images": [
       "https://i.dummyjson.com/data/products/30/1.jpg",
