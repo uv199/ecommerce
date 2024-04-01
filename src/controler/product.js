@@ -63,7 +63,6 @@ export const getAllPaginate = async (req, res) => {
 
 export const getAll = async (req, res) => {
   const filterQuery = req?.query;
-  console.log("-----------  filterQuery----------->", filterQuery);
   let filtarableFeilds = [
     "color",
     "size",
@@ -74,7 +73,9 @@ export const getAll = async (req, res) => {
     "search",
   ];
   let filter = {
-    ...(filterQuery?.mainCategory && { mainCategory: filterQuery?.mainCategory }),
+    ...(filterQuery?.mainCategory && {
+      mainCategory: filterQuery?.mainCategory,
+    }),
     ...(filterQuery?.gender && { gender: filterQuery?.gender }),
     ...(filterQuery?.brand && { brand: filterQuery?.brand }),
     ...(filterQuery?.isAvailable && { isAvailable: filterQuery?.isAvailable }),
@@ -117,7 +118,8 @@ export const getAll = async (req, res) => {
           };
           break;
         case "rating":
-          if (filterQuery.rating) {
+          if (filterQuery.rating != 0) {
+            console.log("----rating", filterQuery.rating);
             const minRating = parseFloat(filterQuery.rating);
             filter["$expr"] = {
               $gte: [{ $divide: ["$rating", "$totalRaters"] }, minRating],
