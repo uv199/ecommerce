@@ -1,6 +1,6 @@
 const faker = require("faker");
 const fs = require("fs-extra");
-
+const stream = fs.createWriteStream("./data.json");
 const categories = [
   "haldi",
   "mehndi",
@@ -12,7 +12,7 @@ const categories = [
 ];
 const mainCategoriesArr = ["Wedding", "Casual", "Simple", "Luxury"];
 const colors = ["red", "yellow", "green", "blue", "black", "white"];
-// const sizes = ["36mm", "40mm", "42mm"];
+const sizes = ["36mm", "40mm", "42mm"];
 
 const generateRandomData = () => {
   // const gender = faker.random.arrayElement(["male", "female", "kids"]);
@@ -21,11 +21,11 @@ const generateRandomData = () => {
   const price = faker.random.number({ min: 500, max: 10000 });
   const discountPercentage = faker.random.number({ min: 0, max: 50 });
   const stock = faker.random.number({ min: 1, max: 100 });
-  const brand = faker.random.arrayElement(brandArr);
+  //   const brand = faker.random.arrayElement(brandArr);
   const category = faker.random.arrayElements(categories);
   const color = faker.random.arrayElements(colors);
   const mainCategorie = faker.random.arrayElement(mainCategoriesArr);
-  // const size = faker.random.arrayElement(sizes);
+  const size = faker.random.arrayElement(sizes);
 
   return {
     // gender,
@@ -38,7 +38,7 @@ const generateRandomData = () => {
     category,
     mainCategorie,
     color,
-    // size,
+    size,
   };
 };
 
@@ -51,9 +51,19 @@ const generateDataSet = (num) => {
 };
 
 const watchesData = generateDataSet(100);
-fs.writeJson("./data.json", watchesData, (err) => {
-  if (err) return console.error(err);
-  console.log("Data has been written to data.json");
-});
+// fs.writeJson("./data.json", watchesData, (err) => {
+//   if (err) return console.error(err);
+//   console.log("Data has been written to data.json");
+// })
+// ;const stream = fs.createWriteStream("./data.json");
 
-console.log(watchesData);
+stream.once("open", (fd) => {
+  stream.write(JSON.stringify(watchesData), (err) => {
+    if (err) {
+      console.error(err);
+    } else {
+      console.log("Data has been written to data.json");
+    }
+    stream.end();
+  });
+});
