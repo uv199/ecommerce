@@ -21,7 +21,6 @@ export const create = async (req, res) => {
   );
   if (match) {
     let index = match?.products?.findIndex((e) => {
-      console.log(e?.productId.toString(), productId);
       return e?.productId.toString() === productId;
     });
     if (index === -1) {
@@ -42,10 +41,11 @@ export const create = async (req, res) => {
       products: [{ productId, count: 1 }],
     })
       .then((resData) => {
-        res.send({ status: 200, data: resData });
+        console.log("-----------  resData----------->", resData)
+        res.status(200).send({ status: 200, data: resData });
       })
       .catch((err) => {
-        res.send({ status: 400, message: err.message });
+        res.status(400).send({ status: 400, message: err.message });
       });
   }
 };

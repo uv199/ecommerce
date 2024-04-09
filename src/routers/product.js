@@ -13,7 +13,7 @@ import {
 
 const productRouter = express.Router();
 
-productRouter.post("/create", createProduct);
+productRouter.post("/create", AdminAuth, createProduct);
 
 productRouter.get("/getProductById/:id", getById);
 

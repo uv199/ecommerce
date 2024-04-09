@@ -53,6 +53,13 @@ app.get("/payment", (req, res) => {
   console.log("req,res", req.body);
 });
 
+app.get("/test/pravin", (req, res) => {
+  console.log(req.body);
+  //  database logic
+  // res.send("hello world pravin...!");
+  res.status(400).send("email not found");
+});
+
 // let rzp = new Razorpay({
 //   key_id: process.env.KEY_ID, // your `KEY_ID`
 //   key_secret: process.env.KEY_SECRET // your `KEY_SECRET`
