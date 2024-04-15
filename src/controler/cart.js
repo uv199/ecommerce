@@ -21,7 +21,7 @@ export const create = async (req, res) => {
   );
   if (match) {
     let index = match?.products?.findIndex((e) => {
-      return e?.productId.toString() === productId;
+      return e?.productId?.toString() === productId;
     });
     if (index === -1) {
       match.products.push({ productId: productId, count: 1 });
