@@ -6,6 +6,7 @@ const client = require("twilio")(
 );
 
 export const sendOTP = (user) => {
+  console.log("-----------  user----------->", user)
   const otp = Math.trunc(Math.random() * 1000000);
   client.messages
     .create({
