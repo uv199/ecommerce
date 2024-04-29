@@ -117,15 +117,15 @@ export const getAll = async (req, res) => {
             $gte: parseInt(filterQuery[field].gt),
           };
           break;
-        case "rating":
-          if (filterQuery.rating != 0) {
-            console.log("----rating", filterQuery.rating);
-            const minRating = parseFloat(filterQuery.rating);
-            filter["$expr"] = {
-              $gte: [{ $divide: ["$rating", "$totalRaters"] }, minRating],
-            };
-          }
-          break;
+        // case "rating":
+        //   if (filterQuery.rating != 0) {
+        //     console.log("----rating", filterQuery.rating);
+        //     const minRating = parseFloat(filterQuery.rating);
+        //     filter[field] = {
+        //       $gte: filterQuery.rating,
+        //     };
+        //   }
+        //   break;
       }
     }
   });
@@ -144,8 +144,8 @@ export const getAll = async (req, res) => {
     },
   ];
   try {
-    console.log("-----------  aggrigation----------->", aggrigation);
     let [response] = await model.Product.aggregate(aggrigation);
+    console.log("-----------  response----------->", response);
     res.send({
       status: 200,
       count: response?.count || 0,
