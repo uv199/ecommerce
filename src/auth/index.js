@@ -4,10 +4,12 @@ import { model } from "../models";
 export const authorized = async (req, res, next) => {
   try {
     const token = req?.headers?.authorization?.split?.(" ")?.[1];
+    console.log("-----------  token----------->", token)
     if (!token) throw new Error("you are not authorized");
     const data = jwt.verify(token, process.env.SECRET_KEY);
     if (data) {
       const userData = await model.User.findOne({ email: data?.email });
+      console.log("-----------  userData----------->", userData)
       req.loginUser = { ...userData, id: userData?._id.toString() };
       next();
     } else throw new Error("you are not authorized");

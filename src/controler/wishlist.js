@@ -2,9 +2,13 @@ import { model } from "../models";
 
 export const createWishlist = (req, res) => {
   req.body.userId = req?.loginUser?.id;
-  model.WishList.update({ userId: req?.loginUser?.id }, req?.body, {
-    upsert: true,
-  })
+  model.WishList.update(
+    { userId: req?.loginUser?.id },
+    { $push: { products: [...req?.body.products] } },
+    {
+      upsert: true,
+    }
+  )
     .then((resData) => {
       res.send({ status: 200, data: resData });
     })

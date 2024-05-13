@@ -23,7 +23,7 @@ export const productByRange = async (req, res) => {
       //     $and: [{ price: { $gt: val.gt } }, { price: { $lt: val.lt } }],
       //   },
       //   { price: 1, title: 1 }
-    );
+    ).sort({ createdAt: -1 });
     res.send({ status: 200, data });
   } catch (error) {
     res.send({ status: 400, message: error.message });
