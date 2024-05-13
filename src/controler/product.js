@@ -53,7 +53,10 @@ export const getAllPaginate = async (req, res) => {
   }
   console.log("-----------  filter----------->", filter);
   try {
-    let data = await model.Product.paginate(filter, options);
+    let data = await model.Product.paginate(filter, {
+      ...options,
+      sort: { createdAt: -1 },
+    });
 
     res.send({ status: 200, data: data?.docs, count: data?.totalDocs });
   } catch (error) {
