@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  deleteUser,
   getAll,
   getUserById,
   reset_passsword,
@@ -72,6 +73,8 @@ userRouter.get("/getUserById/:id", getUserById);
 userRouter.post("/signin", signIn);
 
 userRouter.post("/signUp", signUp);
+
+userRouter.delete("/delete/:id", deleteUser);
 
 userRouter.post(`/update/:id`, updateUser);
 

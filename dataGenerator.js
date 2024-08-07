@@ -1,27 +1,15 @@
 const faker = require("faker");
 const fs = require("fs-extra");
 const stream = fs.createWriteStream("./data.json");
+
 const categories = [
-  "gold",
-  "platinam",
-  "dimond",
-  "wedding",
-  "dailyWear",
-  "silver",
-  "18Karat",
-  "24Karat",
-  "22Karat",
+  "logSleevs",
+  "chineesCollor",
+  "roundNeck",
+  "sleevLess",
+  "offSolder",
 ];
-const mainCategoriesArr = [
-  "ring",
-  "earrings",
-  "menKada",
-  "bracelet",
-  "goldChain",
-  "necklace",
-  "gifting",
-  "goldCoin",
-];
+const mainCategorysArr = ["tShirt", "shirt", "jeans", "trouser"];
 const colors = [
   "red",
   "blue",
@@ -34,33 +22,30 @@ const colors = [
   "brown",
 ];
 const titles = [
-  "gold ring",
-  "gold kada",
-  "dimond ring",
-  "mangal sutra",
-  "rose gold chain",
-  "silver chain",
-  "24karat gold coin",
-  "couple ring",
-  "wedding ring",
-  "gold dimond nechleck",
+  "Cotton cargo",
+  "New Cotton cargo",
+  "Hip hop Tee",
+  "Check shirt",
+  "Pink pong shirt",
+  "Doller tee",
+  "villen tee",
 ];
-const sizes = ["1.5", "2", "3", "4"];
-const brands = ["holiSale", "newArrivals", "diwaliSale"];
+const sizes = ["x", "s", "xl", "xs", "2xl", "3xl"];
+// const brands = ["summerSale", "newArrivals", "diwaliSale"];
 
 const generateRandomData = () => {
-  const gender = faker.random.arrayElement(["male", "female"]);
+  const gender = faker.random.arrayElement(["male", "female", "kids"]);
   // const title = faker.commerce.productName();
   const title = faker.random.arrayElement(titles);
   const description = faker.lorem.sentence();
-  const price = faker.random.number({ min: 500, max: 500000 });
-  const discountPercentage = faker.random.number({ min: 0, max: 10 });
+  const price = faker.random.number({ min: 100, max: 15000 });
+  const discountPercentage = faker.random.number({ min: 0, max: 50 });
   const rating = faker.random.number({ min: 0, max: 5 });
-  const availableStock = faker.random.number({ min: 1, max: 10 });
-  const brand = faker.random.arrayElement(brands);
+  const availableStock = faker.random.number({ min: 10, max: 100 });
+  // const brand = faker.random.arrayElement(brands);
   const category = faker.random.arrayElements(categories, 2);
-  // const color = faker.random.arrayElements(colors);
-  const mainCategorie = faker.random.arrayElement(mainCategoriesArr);
+  const color = faker.random.arrayElements(colors);
+  const mainCategory = faker.random.arrayElement(mainCategorysArr);
   const size = faker.random.arrayElements(sizes);
 
   return {
@@ -70,10 +55,10 @@ const generateRandomData = () => {
     price,
     discountPercentage,
     availableStock,
-    brand,
+    // brand,
     category,
-    mainCategorie,
-    // color,
+    mainCategory,
+    color,
     size,
     rating,
   };

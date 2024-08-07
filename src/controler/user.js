@@ -12,7 +12,6 @@ const useToken = (data) => {
 export const getAll = (req, res) => {
   model.User.find()
     .sort({ createdAt: -1 })
-    // .populate({ path: "products.productId" })
     .then((resData) => {
       if (resData.length > 0) {
         res.send({ status: "200", data: resData });
@@ -73,6 +72,7 @@ export const uploadFile = (req, res) => {
 };
 
 export const signUp = async (req, res) => {
+  console.log("=-=-=>");
   let input = req?.body;
   model.User.create(input)
     .then((resData) => {
@@ -104,12 +104,21 @@ export const updateUser = (req, res) => {
     }
     delete data.address;
   }
-  let password = data.password;
-  delete data.password;
+
   model.User.findByIdAndUpdate(id, data, { new: true })
     .then(async (resData) => {
-      resData.password = password;
       await resData.save();
+      res.send({ status: 200, data: resData });
+    })
+    .catch((err) => {
+      res.send({ status: 400, message: err.message });
+    });
+};
+export const deleteUser = (req, res) => {
+  let id = req?.params?.id;
+
+  model.User.findByIdAndDelete(id)
+    .then(async (resData) => {
       res.send({ status: 200, data: resData });
     })
     .catch((err) => {

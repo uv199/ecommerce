@@ -66,6 +66,7 @@ export const getAllPaginate = async (req, res) => {
 
 export const getAll = async (req, res) => {
   const filterQuery = req?.query;
+  console.log("-----------  filterQuery----------->", filterQuery)
   let filtarableFeilds = [
     "color",
     "size",
@@ -133,6 +134,7 @@ export const getAll = async (req, res) => {
     }
   });
 
+  console.log("-----------  filter----------->", filter)
   let aggrigation = [
     { $match: filter },
     {
@@ -148,7 +150,6 @@ export const getAll = async (req, res) => {
   ];
   try {
     let [response] = await model.Product.aggregate(aggrigation);
-    console.log("-----------  response----------->", response);
     res.send({
       status: 200,
       count: response?.count || 0,

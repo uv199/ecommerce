@@ -25,6 +25,7 @@ productRouter.get("/getProductByRang", productByRange);
 
 productRouter.put("/update/:id", updateProduct);
 
-productRouter.delete("/delete/:id", deleteProduct);
+productRouter.delete("/delete/:id", AdminAuth, deleteProduct);
 
 export default productRouter;
+
