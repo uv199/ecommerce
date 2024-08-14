@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  node-app:
+    image: node:20
+    container_name: node-app
+    working_dir: /src
+    volumes:
+      - ./:/src
+      - /src/node_modules
+    command: npm start
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=production
+      - MONGO_URI=mongodb://mongo:27017/perfume
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:4.4
+    container_name: mongodb
+    volumes:
+      - mongodb_data:/data/db
+    ports:
+      - '27017:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+volumes:
+  mongodb_data:

@@ -1,0 +1,39 @@
+image: docker:latest
+
+stages:
+  - build
+  - deploy
+
+build:
+  stage: build
+  script:
+    - docker build -t my-node-app .
+    - docker push docker.io/uv199/my-node-app:latest
+
+deploy:
+  stage: deploy
+  script:
+    - aws ecs create-task-definition \
+      --family my-task-definition \
+      --container-definitions '[
+        {
+          "name": "my-container",
+          "image": "docker.io/uv199/my-node-app:latest",
+          "portMappings": [
+            {
+              "containerPort": 3000,
+              "hostPort": 3000
+            }
+          ]
+        }
+      ]' \
+      --cpu "256" \
+      --memory "512" \
+      > task-definition.json
+    - aws ecs register-task-definition --cli-input-json file://task-definition.json
+    - aws ecs update-service \
+      --service my-service \
+      --cluster my-cluster \
+      --task-definition arn:aws:ecs:ap-south-1:970547359676:task-definition/my-task-definition:latest
+  only:
+    - main
